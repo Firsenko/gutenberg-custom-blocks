@@ -5,8 +5,7 @@ const { RichText,
         MediaUpload
     } = wp.editor;
 
-const { PanelBody,
-    IconButton } = wp.components;
+const { PanelBody, IconButton } = wp.components;
 
 const blockStyle = {
     backgroundColor: '#fff',
@@ -78,18 +77,23 @@ registerBlockType('fira/custom-cta', {
                 </PanelBody>
                 <PanelBody title={ 'Background Image settings' }>
                     <p><strong> Select a Background Image: </strong></p>
-                   {/*<MediaUpload onSelect={ onSelectImage }*/}
-                   {/*             type="image"*/}
-                   {/*             value= { backgroundImage }*/}
-                   {/*             render={ ( { open } ) => {*/}
-                   {/*                 <IconButton onClick={ open }*/}
-                   {/*                             icon="upload"*/}
-                   {/*                             className="editor-media-placeholder__button is-button is-default is-large">*/}
-                   {/*                                 BackgroundImage*/}
-                   {/*                 </IconButton>*/}
-                   {/*                 }*/}
-                   {/*             }*/}
-                   {/*/>*/}
+                   <MediaUpload onSelect={ onSelectImage }
+                                type="image"
+                                value= { backgroundImage }
+                                render={ ({open}) => {
+                                    return <IconButton
+                                                onClick={ open }
+                                                icon="upload"
+                                                className="editor-media-placeholder__button is-button is-default is-large">
+                                                    Background Image
+                                            </IconButton>
+
+                                    }
+                                }
+                   />
+                    <img style={ { marginTop: '20px' } }
+                        src={backgroundImage}
+                    />
                 </PanelBody>
             </InspectorControls>,
             <div class="cta-container"
@@ -116,17 +120,24 @@ registerBlockType('fira/custom-cta', {
     save( { attributes } ) {
         const {
             title,
+            body,
             titleColor,
-            body
+            backgroundImage
         } = attributes;
 
-        return ([
-            <div class="cta-container">
+        return (
+            <div class="cta-container"
+                 style={{
+                     backgroundImage: `url(${backgroundImage})`,
+                     backgroundSize: 'cover',
+                     backgroundPosition: 'center',
+                     backgroundRepeat: 'no-repeat'
+                 }}>
                 <h2  style={ { color: titleColor } } > { title } </h2>
                 <RichText.Content tagName="p"
                                     value={ body } />
             </div>
-        ]);
+        );
     },
     
 });
